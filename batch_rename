@@ -1,0 +1,29 @@
+def batch_rename():
+    from PIL import Image
+    from os import listdir
+    from os.path import isfile, join
+
+    print("Please input the path of the files to be converted")
+    path = input()
+    print("")
+    
+    print("Please input batch number (E.g. 1st, 2nd, 3rd, 4th)")
+    batch_num = input()
+    print("")
+    
+    file_list_1 = [f for f in listdir(path) if isfile(join(path, f))]
+    file_list_2 = [i for i in file_list_1 if ".jpg" in i or ".png" in i and "blank" not in i]
+
+    new_names = []
+
+    for a, b in enumerate(file_list_2):
+        new_names.append(f"{batch_num}_batch_샘플_{a+1}.jpg")
+        
+    counter = 0
+    for (a, b) in zip(new_names, file_list_2):
+        image = Image.open(f"{path}/{b}").convert("RGB")
+        image.save(f"{path}/{a}")
+        counter += 1
+        print(f"File {counter} completed, {len(new_names) - counter} files remaining")
+        if counter == len(new_names):
+            print("Conversion complete")
